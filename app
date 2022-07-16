@@ -12,6 +12,8 @@ fi
 
 export PROJECT_NAME="trading-guru-$FLAVOR"
 
+export POSTGRES_SERVICE=postgres
+
 export DOCKER_COMPOSE=$ROOT_PATH/docker/docker-compose.$FLAVOR.yml
 
 # Setting ENV variables
@@ -35,6 +37,7 @@ if [[ ! -v EXPORTED ]] || [ $EXPORTED != $FLAVOR ] ; then
   __export_file_env_vars $ROOT_PATH/.env.$FLAVOR
   __export_file_env_vars $ROOT_PATH/.env.$FLAVOR.local
   echo ""
+  export POSTGRES_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVICE}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
   export EXPORTED=$FLAVOR
 fi
 
