@@ -6,15 +6,17 @@ export APP=$ROOT_PATH/app
 
 export OS=$(uname)
 
-if [[ -z "${FLAVOR}" ]]; then
-  export FLAVOR=dev
+if [[ -z "${APP_ENV}" ]]; then
+  export APP_ENV=dev
 fi
 
-export PROJECT_NAME="trading-guru-$FLAVOR"
+export PROJECT_NAME="trading-guru-$APP_ENV"
 
 export POSTGRES_SERVICE=postgres
 
-export DOCKER_COMPOSE=$ROOT_PATH/docker/docker-compose.$FLAVOR.yml
+export DOCKER_COMPOSE=$ROOT_PATH/docker/docker-compose.$APP_ENV.yml
+
+export DOCKER_COMPOSE_OVERRIDE=$ROOT_PATH/docker/docker-compose.$APP_ENV.yml
 
 # Setting ENV variables
 
@@ -31,14 +33,14 @@ __export_file_env_vars() {
   fi
 }
 
-if [[ ! -v EXPORTED ]] || [ $EXPORTED != $FLAVOR ] ; then
+if [[ ! -v EXPORTED ]] || [ $EXPORTED != $APP_ENV ] ; then
   __export_file_env_vars $ROOT_PATH/.env
   __export_file_env_vars $ROOT_PATH/.env.local
-  __export_file_env_vars $ROOT_PATH/.env.$FLAVOR
-  __export_file_env_vars $ROOT_PATH/.env.$FLAVOR.local
+  __export_file_env_vars $ROOT_PATH/.env.$APP_ENV
+  __export_file_env_vars $ROOT_PATH/.env.$APP_ENV.local
   echo ""
-  export POSTGRES_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVICE}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
-  export EXPORTED=$FLAVOR
+  export POSTGRES_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVICE}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?serverVersion=${POSTGRES_VERSION}
+  export EXPORTED=$APP_ENV
 fi
 
 # Handling related command
