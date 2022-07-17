@@ -14,7 +14,7 @@ export PROJECT_NAME="trading-guru-$APP_ENV"
 
 export POSTGRES_SERVICE=postgres
 
-export DOCKER_COMPOSE=$ROOT_PATH/docker/docker-compose.$APP_ENV.yml
+export DOCKER_COMPOSE=$ROOT_PATH/docker/docker-compose.yml
 
 export DOCKER_COMPOSE_OVERRIDE=$ROOT_PATH/docker/docker-compose.$APP_ENV.yml
 

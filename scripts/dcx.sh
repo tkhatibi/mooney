@@ -5,5 +5,5 @@ run() {
 }
 
 description() {
-  echo "Like 'docker-compose exec', but easier to use in different flavors";
+  echo "Like 'docker-compose exec', but easier to use in different environements";
 }
