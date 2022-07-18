@@ -10,7 +10,7 @@ if [[ -z "${APP_ENV}" ]]; then
   export APP_ENV=dev
 fi
 
-export PROJECT_NAME="trading-guru-$APP_ENV"
+export PROJECT_NAME="mooney-$APP_ENV"
 
 export POSTGRES_SERVICE=postgres
 
