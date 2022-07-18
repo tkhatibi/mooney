@@ -31,7 +31,7 @@ services:
   caddy:
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ../api/public:/srv/app/public:ro
+      - ../api:/srv/app:ro
 
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
