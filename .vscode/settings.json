@@ -1,0 +1,4 @@
+{
+  "php.validate.executablePath": "docker/bin/php",
+  "php.version": ""
+}
