@@ -1,7 +1,7 @@
 #!/bin/bash
 
 run() {
-  $APP dc logs -f ${@:1}
+  $APP dc logs -f --tail 100 ${@:1}
 }
 
 description() {
