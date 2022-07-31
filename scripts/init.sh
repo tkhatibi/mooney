@@ -16,6 +16,8 @@ run() {
     if [[ " ${@:1} " =~ " -r " ]]; then
         $APP dc down -v --remove-orphans
         $APP dc build --no-cache
+        mkdir -p $ROOT_PATH/api
+        cp .env $ROOT_PATH/api/.env
     fi
 
     # https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md#editing-permissions-on-linux
