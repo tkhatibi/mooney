@@ -22,6 +22,7 @@ services:
 ###< doctrine/doctrine-bundle ###
 
   php:
+    container_name: ${PROJECT_NAME}_php
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -52,6 +53,7 @@ services:
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
 
   caddy:
+    container_name: ${PROJECT_NAME}_caddy
     build:
       context: ..
       dockerfile: ./docker/Dockerfile

@@ -33,5 +33,12 @@ services:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ../api:/srv/app:ro
 
+  adminer:
+    container_name: ${PROJECT_NAME}_adminer
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - ${ADMINER_PORT}:8080
+
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
