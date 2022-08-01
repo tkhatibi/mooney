@@ -7,7 +7,7 @@ export APP=$ROOT_PATH/app
 export OS=$(uname)
 
 if [[ -z "${APP_ENV}" ]]; then
-  export APP_ENV=dev
+    export APP_ENV=dev
 fi
 
 export PROJECT_NAME="mooney-$APP_ENV"
@@ -21,27 +21,32 @@ export DOCKER_COMPOSE_OVERRIDE=$ROOT_PATH/docker/docker-compose.$APP_ENV.yml
 # Setting ENV variables
 
 __export_file_env_vars() {
-  ENV_PATH=${1}
-  if [ ! -f "$ENV_PATH" ]; then
-    echo "Env file not found: $ENV_PATH"
-  elif [ ! -s "$ENV_PATH" ]; then
-    echo "Env file skipped duo to being empty: $ENV_PATH"
-  elif [ "$OS" = 'Linux' ]; then
-    export $(grep -v '^#' $ENV_PATH | xargs -d '\n')
-  elif [ "$OS" = 'FreeBSD' ]; then
-    export $(grep -v '^#' $ENV_PATH | xargs -0)
-  fi
+    ENV_PATH=${1}
+    if [ ! -f "$ENV_PATH" ]; then
+        echo "Env file not found: $ENV_PATH"
+    elif [ ! -s "$ENV_PATH" ]; then
+        echo "Env file skipped duo to being empty: $ENV_PATH"
+    elif [ "$OS" = 'Linux' ]; then
+        export $(grep -v '^#' $ENV_PATH | xargs -d '\n')
+    elif [ "$OS" = 'FreeBSD' ]; then
+        export $(grep -v '^#' $ENV_PATH | xargs -0)
+    fi
 }
 
 if [[ ! -v EXPORTED ]] || [ $EXPORTED != $APP_ENV ] ; then
-  __export_file_env_vars $ROOT_PATH/.env
-  __export_file_env_vars $ROOT_PATH/.env.local
-  __export_file_env_vars $ROOT_PATH/.env.$APP_ENV
-  __export_file_env_vars $ROOT_PATH/.env.$APP_ENV.local
-  echo ""
-  export POSTGRES_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVICE}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?serverVersion=${POSTGRES_VERSION}
-  export EXPORTED=$APP_ENV
+    __export_file_env_vars $ROOT_PATH/.env
+    __export_file_env_vars $ROOT_PATH/.env.local
+    __export_file_env_vars $ROOT_PATH/.env.$APP_ENV
+    __export_file_env_vars $ROOT_PATH/.env.$APP_ENV.local
+    echo ""
+    export DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVICE}:${POSTGRES_PORT}/${POSTGRES_DB}?serverVersion=${POSTGRES_VERSION}
+    export EXPORTED=$APP_ENV
+
+    echo "APP_ENV: $APP_ENV"
+    echo "DATABASE_URL: $DATABASE_URL"
+    echo ""
 fi
+
 
 # Handling related command
 
@@ -51,32 +56,32 @@ SCRIPT_EXISTS=false
 IS_RUN=false
 
 if [[ ${1} = "help" ]]; then
-  COMMAND=${2}
-  if [ -f "$ROOT_PATH/scripts/${2}.sh" ]; then
-    SCRIPT_EXISTS=true
-  fi
+    COMMAND=${2}
+    if [ -f "$ROOT_PATH/scripts/${2}.sh" ]; then
+        SCRIPT_EXISTS=true
+    fi
 elif [ -f "$ROOT_PATH/scripts/${1}.sh" ]; then
-  IS_RUN=true
-  SCRIPT_EXISTS=true
+    IS_RUN=true
+    SCRIPT_EXISTS=true
 fi
 
 if $SCRIPT_EXISTS ; then
-  source "$ROOT_PATH/scripts/$COMMAND.sh"
-  if $IS_RUN ; then
-    run $ARGS
-  elif [ $(type -t help) == function ]; then
-    help
-  else
-    description
-  fi
+    source "$ROOT_PATH/scripts/$COMMAND.sh"
+    if $IS_RUN ; then
+        run $ARGS
+    elif [ $(type -t help) == function ]; then
+        help
+    else
+        description
+    fi
 else
-  if [ "$COMMAND" != "" ]; then
-    echo "Command '$COMMAND' does not exist."
-  fi
-  echo "Available Commands:"
-  for scriptFileName in $ROOT_PATH/scripts/*
-  do
-    source $scriptFileName
-    echo "  $(basename $scriptFileName .sh): $(description)"
-  done
+    if [ "$COMMAND" != "" ]; then
+        echo "Command '$COMMAND' does not exist."
+    fi
+    echo "Available Commands:"
+    for scriptFileName in $ROOT_PATH/scripts/*
+    do
+        source $scriptFileName
+        echo "  $(basename $scriptFileName .sh): $(description)"
+    done
 fi
